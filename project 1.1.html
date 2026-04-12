@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Library webpage</title>
+  <style>
+    body {
+      font-size: 1rem;
+      font-family: Arial, Helvetica, sans-serif;
+      margin: 0;
+      min-height: 100vh;
+      background-attachment: fixed;
+      background-image: linear-gradient(to bottom, rgb(29, 170, 31), yellow);
+      color: aliceblue;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: rgb(68, 218, 68);
+      height: 80px;
+      padding: 0 20px;
+    }
+
+    header img {
+      width: 80px;
+      height: 80px;
+      object-fit: contain;
+    }
+
+    .search-container {
+      display: flex;
+      max-width: 400px;
+      margin: 20px auto; /* Centers the search bar */
+    }
+
+    input[type="search"] {
+      flex: 1;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 4px 0 0 4px;
+      outline: none;
+    }
+    .btn {
+      padding: 10px 15px;
+      background-color: #2196F3;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .search-btn {
+      border-radius: 0 4px 4px 0;
+    }
+
+    .login-btn {
+      border-radius: 4px;
+      background-color: #f44336; /* Distinct color for login */
+    }
+    main {
+      text-align: center;
+    }
+    
+  </style>
+</head>
+<body>
+  <header>
+    <img src="C:\Users\sampreeth\OneDrive\Documents\Project 1\project data\Screenshot 2026-04-07 140530.png" alt="Library Logo"> <!-- Use a relative path here -->
+    <div class="log">
+      <button class="btn login-btn" onclick="location.href='file:///C:/Users/sampreeth/OneDrive/Documents/web%20lab%20expriments/Wed-exp-4.html">Login</button>
+    </div>
+  </header>
+
+  <main>
+    <h1>SIET <br> LIBRARY</h1>
+    <p>Discover over 500 books, digital resources, and academic journals.<br>
+       Your gateway to knowledge and research excellence.</p>
+<br>
+<br>
+<br>
+    <form class="search-container">
+      <input type="search" placeholder="Search for books..." name="q" aria-label="Search">
+      <button type="submit" class="btn search-btn">Search</button>
+    </form>  
+<br>
+<br>
+    <form class="search-container">
+      <input type="search" placeholder="Search for Author..." name="q" aria-label="Search">
+      <button type="submit" class="btn search-btn">Search</button>
+    </form> 
+  </main>
+</body>
+</html>
