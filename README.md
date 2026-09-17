@@ -1,98 +1,117 @@
 # Smart Library Book Locator 📚
 
-> A web-based system to quickly locate books in a college library using title or author search with exact shelf location details.
+> A web-based system designed to quickly locate books in a college library using title or author search with exact physical shelf coordinates (Rack, Column, Row, Position) and real-time inventory management.
 
-## Features
+## 🌟 Features
 
-- 🔍 **Book Search** - Search by Title or Author
-- 📍 **Exact Location** - Get precise shelf location (e.g., 3rd floor, West wing, Shelf 5, Section B)
-- 🖥️ **Responsive Design** - Works on desktop and mobile devices
-- ✨ **Clean UI** - Modern, user-friendly interface
+### 🔍 Student Features
+- **Instant Book Search**: Search by Title, Author, or Keyword with instant real-time results.
+- **Exact Shelf Location Mapping**: View precise physical shelf coordinates (`Rack`, `Column`, `Row`, and `Position`).
+- **Real-time Status Tracking**: Instantly check if a book is currently "Available" on the shelf or "Issued".
+- **Student Authentication**: Secure registration and login portal supporting college student registration numbers and departments.
 
-## Tech Stack
+### 👨‍💼 Librarian Administrative Panel
+- **Inventory Management**: Add new books to the catalog with exact physical grid coordinates.
+- **Status Toggle**: Change book availability status between "Available" and "Issued" with one click.
+- **Catalog Control**: Remove decommissioned or missing books from the library system.
+- **Search & Filter**: Real-time filtering across the library inventory.
 
-- **Frontend**: HTML5, CSS3, JavaScript (ES6+)
-- **Icons**: Font Awesome
+### 🗄️ Relational Database Architecture (Production-Ready)
+- **Comprehensive DDL, DML, DQL, DCL, TCL Scripts**: Ready for MySQL / MariaDB deployments.
+- **Entity-Relationship Diagram (ERD)**: Fully modeled relationships between Students, Librarians, Shelf Locations, Books, and Borrow Transactions.
+- **Normalized Data Dictionary**: Complete table schemas and constraint definitions.
+
+---
+
+## 🛠️ Tech Stack
+
+- **Frontend**: HTML5, CSS3 (Modern Glassmorphism & Responsive UI), Vanilla JavaScript (ES6+)
+- **Client Storage**: `localStorage` with automatic data seeding for immediate local & GitHub Pages preview
+- **Database Backend**: SQL (MySQL / MariaDB compatible)
 - **Deployment**: GitHub Pages
 
-## Prerequisites
+---
 
-- A modern web browser (Chrome, Firefox, Safari, Edge, etc.)
+## 🚀 Live Demo & Usage
 
-## Installation
+1. **Open the live application on GitHub Pages**:
+   [https://sampreethg.github.io/smart-library-book-locator/](https://sampreethg.github.io/smart-library-book-locator/)
 
-No installation needed! This is a client-side only application.
+2. **Search Books**:
+   - Enter a title (e.g., *"Introduction to Algorithms"*, *"Database System Concepts"*, *"Clean Code"*) or author name in the search bar.
+   - View exact shelf location chips (`🗄️ Rack 1`, `🗂 Col 1`, `↕ Row 1`, `🎯 Pos: 1st`) and availability badge.
 
-## Usage
+3. **Login & Role Portals**:
+   - Access the **Student Portal** to search and view borrowing details.
+   - Access the **Librarian Control Panel** to add books and manage inventory.
+   - *Default Demo Credentials*:
+     - **Student**: `student@siet.edu.in` | Password: `student123` | Reg No: `714025104001`
+     - **Librarian**: `librarian@siet.edu.in` | Password: `admin123`
 
-1.  **Open the application** - Click on the following link to open the live demo:
-    [https://spsampreeth5.github.io/smart-library-book-locator/](https://spsampreeth5.github.io/smart-library-book-locator/)
+---
 
-2.  **Enter a book title** or **author name** in the search bar
+## 📁 Project Structure
 
-3.  **Click the search button** or press Enter
-
-4.  **View the results** - See the exact shelf location and book details
-
-## Example
-
-**Search:** "The Great Gatsby"
-
-**Result:**
-- 📍 **Location**: 3rd floor, West wing, Shelf 5, Section B
-- 🏢 **Building**: Main Library Building
-- 📚 **Books**: The Great Gatsby
-- 🔢 **Accession No**: 123456789
-
-## Project Structure
-
-```
+```text
 smart-library-book-locator/
-├── index.html            # Main application page
-├── style.css             # Styling and layout
-├── script.js             # Application logic and search functionality
-├── README.md             # Project documentation
-└── .gitignore          # Git ignore file
+├── index.html                      # Main entry point & live search landing page
+├── shared_library.js               # Shared data layer (catalog seed, auth & session helper)
+├── README.md                       # Comprehensive project documentation
+├── LICENSE                         # MIT License
+├── .gitignore                      # Git ignore file
+├── Pro/                            # Application Core Module
+│   ├── Home_page.html              # Library home page
+│   ├── siet_register_login.html    # Authentication portal for Students & Librarians
+│   ├── After_login_page.html       # Student book locator dashboard
+│   ├── Librarian_Desktop.html      # Librarian inventory control panel
+│   ├── shared_library.js           # Shared library helper script
+│   ├── DATABASE_QUERIES.sql        # Production SQL scripts (DDL, DML, DQL, DCL, TCL)
+│   ├── DATABASE_ERD.md             # Mermaid.js Entity-Relationship Diagrams
+│   ├── DATABASE_TABLE_SCHEMAS.md   # Data dictionary & column specifications
+│   ├── SQL_SYNTAX_AND_DEFINITIONS.md# SQL command definitions & reference
+│   └── README.md                   # Pro module overview
+└── ppt/                            # Project Presentation & Documentation Slides
+    ├── SmartLibrary_BookLocator.pptx
+    ├── SmartLibrary_BookLocator.2.0.pptx
+    ├── SmartLibrary_Completed.pptx
+    └── SmartLibrary_Completed 2.0.pptx
 ```
 
-## Development
+---
 
-To run this project locally:
+## 💻 Local Development
 
-1.  Clone the repository:
-    ```bash
-    git clone https://github.com/spsampreeth5/smart-library-book-locator.git
-    ```
+To run this project locally without any server setup:
 
-2.  Open `index.html` in your browser:
-    ```bash
-    open index.html  # macOS
-    # or
-    start index.html # Windows
-    ```
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/sampreethg/smart-library-book-locator.git
+   ```
 
-## Demo
+2. **Navigate into the directory**:
+   ```bash
+   cd smart-library-book-locator
+   ```
 
-![Smart Library Book Locator Demo](https://user-images.githubusercontent.com/109294823/273185498-3524f45a-6c35-490c-b805-a14cd458f01a.png)
+3. **Open `index.html` in your browser**:
+   ```bash
+   # On Windows
+   start index.html
 
-## Contributing
+   # On macOS
+   open index.html
 
-Contributions are welcome! Feel free to open an issue or submit a pull request.
+   # On Linux
+   xdg-open index.html
+   ```
 
-## License
+---
+
+## 📜 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## Author
+## 👤 Author
 
-👤 **Sampreeth S P**
-
-- GitHub: [spsampreeth5](https://github.com/spsampreeth5)
-- Website: [spsampreeth.com](https://spsampreeth.com)
-- LinkedIn: [Sampreeth S P](https://linkedin.com/in/spsampreeth)
-
-## Support
-
-If you find this project useful, please give it a ⭐!
-
----
+**Sampreeth G**
+- GitHub: [@sampreethg](https://github.com/sampreethg)

@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SIET Library - Smart Book Locator</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      min-height: 100vh;
+      background-attachment: fixed;
+      background-image: linear-gradient(135deg, #1daa1f 0%, #a8e063 50%, #f7dc6f 100%);
+      color: #fff;
+    }
+    .lib-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: rgba(30, 130, 30, 0.85);
+      backdrop-filter: blur(8px);
+      height: 75px;
+      padding: 0 24px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+    }
+    .lib-logo {
+      width: 50px;
+      height: 50px;
+      background: #fff;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    .lib-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .lib-title-small {
+      font-size: 20px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 0.5px;
+    }
+    .nav-actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    .btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 14px;
+      transition: all 0.2s ease;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .login-btn {
+      background-color: #f44336;
+      color: white;
+    }
+    .login-btn:hover {
+      background-color: #d32f2f;
+      transform: translateY(-1px);
+    }
+    .reg-btn {
+      background-color: rgba(255, 255, 255, 0.25);
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.5);
+    }
+    .reg-btn:hover {
+      background-color: rgba(255, 255, 255, 0.4);
+    }
+    .lib-main {
+      text-align: center;
+      padding: 2.5rem 1rem 3rem;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .lib-main h1 {
+      font-size: 44px;
+      font-weight: 800;
+      line-height: 1.1;
+      margin-bottom: 0.8rem;
+      text-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+    }
+    .lib-main p {
+      font-size: 17px;
+      color: #f4fff4;
+      max-width: 540px;
+      margin: 0 auto 2rem;
+      line-height: 1.6;
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    }
+    .search-box {
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      border-radius: 14px;
+      padding: 1.5rem;
+      max-width: 560px;
+      margin: 0 auto 2rem;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    }
+    .search-row {
+      display: flex;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.12);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .search-row select {
+      padding: 12px 14px;
+      border: 1px solid #ddd;
+      border-right: none;
+      background: #f8f9fa;
+      color: #333;
+      font-size: 14px;
+      font-weight: 600;
+      outline: none;
+      cursor: pointer;
+    }
+    .search-row input {
+      flex: 1;
+      padding: 12px 16px;
+      border: 1px solid #ddd;
+      outline: none;
+      font-size: 15px;
+      color: #333;
+      background: #fff;
+    }
+    .search-row button {
+      padding: 12px 24px;
+      background-color: #1565C0;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 14px;
+      transition: background-color 0.2s;
+    }
+    .search-row button:hover {
+      background-color: #0D47A1;
+    }
+    .search-hint {
+      margin-top: 10px;
+      font-size: 13px;
+      color: #e8ffe8;
+      text-align: left;
+    }
+    #searchResults {
+      max-width: 560px;
+      margin: 0 auto 2rem;
+      text-align: left;
+    }
+    .result-card {
+      background: rgba(255, 255, 255, 0.96);
+      color: #222;
+      border-radius: 10px;
+      padding: 16px 18px;
+      margin-bottom: 14px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .result-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+    }
+    .result-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 6px;
+    }
+    .result-title {
+      font-weight: 700;
+      font-size: 18px;
+      color: #1b5e20;
+      line-height: 1.3;
+    }
+    .result-author {
+      font-size: 14px;
+      color: #555;
+      margin-bottom: 12px;
+      font-style: italic;
+    }
+    .result-loc {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .loc-chip {
+      background: #e8f5e9;
+      color: #1b5e20;
+      border: 1px solid #c8e6c9;
+      border-radius: 6px;
+      padding: 4px 10px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .avail {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .avail.yes {
+      background: #C8E6C9;
+      color: #1B5E20;
+    }
+    .avail.no {
+      background: #FFCDD2;
+      color: #B71C1C;
+    }
+    .no-result {
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 8px;
+      padding: 16px;
+      color: #fff;
+      font-size: 14px;
+      text-align: center;
+    }
+    .stats {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-top: 2rem;
+      flex-wrap: wrap;
+    }
+    .stat {
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(5px);
+      border-radius: 10px;
+      padding: 12px 24px;
+      text-align: center;
+      min-width: 120px;
+    }
+    .stat-num {
+      font-size: 26px;
+      font-weight: 800;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }
+    .stat-lbl {
+      font-size: 13px;
+      color: #f0fff0;
+      margin-top: 4px;
+    }
+    @media (max-width: 600px) {
+      .lib-main h1 { font-size: 32px; }
+      .search-row { flex-direction: column; }
+      .search-row select, .search-row input, .search-row button {
+        border-radius: 0;
+        width: 100%;
+        border-right: 1px solid #ddd;
+      }
+      .search-row select { border-radius: 8px 8px 0 0; }
+      .search-row button { border-radius: 0 0 8px 8px; }
+    }
+  </style>
+</head>
+<body>
+<div class="lib-body">
+  <header class="lib-header">
+    <div class="lib-brand">
+      <div class="lib-logo">📚</div>
+      <span class="lib-title-small">SIET Library</span>
+    </div>
+    <div class="nav-actions">
+      <a href="siet_register_login.html" class="btn reg-btn">Register</a>
+      <a href="siet_register_login.html" class="btn login-btn">Login</a>
+    </div>
+  </header>
+
+  <main class="lib-main">
+    <h1>SIET<br>LIBRARY</h1>
+    <p>Discover books, digital resources, and academic journals with exact physical shelf coordinates.</p>
+
+    <div class="search-box">
+      <div class="search-row">
+        <select id="select" aria-label="Search filter">
+          <option value="title">Title</option>
+          <option value="author">Author</option>
+        </select>
+        <input 
+          type="search" 
+          id="searchInput" 
+          placeholder="Search for books or authors..." 
+          aria-label="Search book"
+          oninput="doSearch()"
+          onkeydown="if(event.key==='Enter')doSearch()"
+        />
+        <button type="button" class="btn search-btn" onclick="doSearch()">Search</button>
+      </div>
+      <div class="search-hint">💡 Type any keyword to view instant shelf coordinates and availability.</div>
+    </div>
+
+    <div id="searchResults"></div>
+
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-num" id="statBooks">8+</div>
+        <div class="stat-lbl">Catalog Titles</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num" id="statRacks">5</div>
+        <div class="stat-lbl">Library Racks</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num" id="statAvail">100%</div>
+        <div class="stat-lbl">Live Tracking</div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script src="shared_library.js"></script>
+<script>
+function doSearch() {
+  const books = getBooks();
+  const q = (document.getElementById('searchInput').value || '').trim().toLowerCase();
+  const type = document.getElementById('select').value;
+  const out = document.getElementById('searchResults');
+
+  if (!q) {
+    out.innerHTML = '';
+    return;
+  }
+
+  const results = books.filter(b => {
+    const field = type === 'author' ? (b.author || '') : (b.title || '');
+    return field.toLowerCase().includes(q);
+  });
+
+  if (results.length === 0) {
+    out.innerHTML = '<div class="no-result">No books matching "' + escapeHtml(q) + '" found in catalog.</div>';
+    return;
+  }
+
+  out.innerHTML = results.map(b => `
+    <div class="result-card">
+      <div class="result-header">
+        <div class="result-title">${escapeHtml(b.title)}</div>
+        <span class="avail ${b.available ? 'yes' : 'no'}">
+          ${b.available ? '● Available' : '○ Issued'}
+        </span>
+      </div>
+      <div class="result-author">by ${escapeHtml(b.author)}</div>
+      <div class="result-loc">
+        <span class="loc-chip">🗄️ ${escapeHtml(b.rack)}</span>
+        <span class="loc-chip">🗂 ${escapeHtml(b.column)}</span>
+        <span class="loc-chip">↕ ${escapeHtml(b.row)}</span>
+        <span class="loc-chip">🎯 Pos: ${escapeHtml(b.pos)}</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+function updateStats() {
+  const books = getBooks();
+  const booksCountEl = document.getElementById('statBooks');
+  const racksCountEl = document.getElementById('statRacks');
+  if (booksCountEl) booksCountEl.textContent = books.length;
+  if (racksCountEl) {
+    const uniqueRacks = new Set(books.map(b => b.rack).filter(Boolean));
+    racksCountEl.textContent = uniqueRacks.size || 5;
+  }
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  updateStats();
+});
+</script>
+</body>
+</html>

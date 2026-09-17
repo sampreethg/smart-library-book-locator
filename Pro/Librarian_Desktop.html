@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Librarian Dashboard - SIET Library</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      min-height: 100vh;
+      background-attachment: fixed;
+      background-image: linear-gradient(135deg, #1daa1f 0%, #a8e063 50%, #f7dc6f 100%);
+      color: #333;
+    }
+
+    /* Header Styles */
+    .lib-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: rgba(30, 130, 30, 0.9);
+      backdrop-filter: blur(8px);
+      height: 75px;
+      padding: 0 24px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+    }
+    .lib-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .lib-logo { 
+      width: 48px; height: 48px;
+      background: #fff;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .lib-title-small { 
+      font-size: 19px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 0.5px;
+    }
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .staff-badge {
+      color: #e8ffe8;
+      font-size: 13px;
+      text-align: right;
+    }
+    .staff-name {
+      font-weight: 700;
+      color: #fff;
+    }
+    .header-btn { 
+      padding: 8px 16px; 
+      background-color: #f44336; 
+      color: white; 
+      border: none; 
+      border-radius: 6px; 
+      cursor: pointer; 
+      font-weight: 700; 
+      font-size: 13px; 
+      text-decoration: none;
+      transition: background-color 0.2s, transform 0.1s;
+    }
+    .header-btn:hover { 
+      background-color: #d32f2f; 
+      transform: translateY(-1px);
+    }
+
+    /* Layout */
+    .page-container {
+      max-width: 950px;
+      margin: 0 auto;
+      padding: 2rem 1rem 3rem;
+    }
+
+    /* Cards */
+    .card { 
+      background: #fff; 
+      border-radius: 14px; 
+      margin-bottom: 2rem;
+      padding: 1.75rem 2rem;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+    }
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 0.75rem;
+    }
+    .card-title { 
+      font-size: 20px; 
+      font-weight: 800; 
+      color: #1B5E20; 
+    }
+    .card-subtitle {
+      font-size: 13px;
+      color: #666;
+    }
+
+    /* Form Elements */
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    .field { margin-bottom: 0.5rem; }
+    .field.col-span { grid-column: span 2; }
+    
+    .field label { 
+      display: block; 
+      font-size: 13px; 
+      font-weight: 700; 
+      color: #444; 
+      margin-bottom: 5px; 
+    }
+    .field input, .field select { 
+      width: 100%; 
+      padding: 10px 12px; 
+      border: 1px solid #ccc; 
+      border-radius: 6px; 
+      font-size: 14px; 
+      outline: none; 
+      background: #fff; 
+      transition: border-color 0.2s;
+    }
+    .field input:focus, .field select:focus { 
+      border-color: #1daa1f; 
+      box-shadow: 0 0 0 3px rgba(29,170,31,0.15); 
+    }
+
+    /* Buttons */
+    .btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 14px;
+      transition: all 0.2s;
+    }
+    .btn-green { background: #1daa1f; color: #fff; }
+    .btn-green:hover { background: #157a17; }
+    .btn-red { background: #f44336; color: white; padding: 6px 12px; font-size: 12px; border-radius: 4px; }
+    .btn-red:hover { background: #d32f2f; }
+    .btn-blue { background: #2196F3; color: white; padding: 6px 12px; font-size: 12px; border-radius: 4px; }
+    .btn-blue:hover { background: #1976D2; }
+    
+    .search-row { 
+      display: flex; 
+      gap: 10px; 
+      margin-bottom: 1rem; 
+    }
+    .search-row input { 
+      flex: 1; 
+      padding: 10px 14px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 14px;
+      outline: none;
+    }
+    .search-row input:focus {
+      border-color: #1daa1f;
+    }
+
+    /* Table / List Styles */
+    .book-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+    .book-table th, .book-table td {
+      text-align: left;
+      padding: 12px 14px;
+      border-bottom: 1px solid #eee;
+      font-size: 14px;
+    }
+    .book-table th {
+      color: #666;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      background: #fafafa;
+    }
+    .book-table tr:hover {
+      background: #f8fbf8;
+    }
+    .status-badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .status-available { background: #E8F5E9; color: #2E7D32; }
+    .status-unavailable { background: #FFEBEE; color: #C62828; }
+
+    .no-result {
+      text-align: center;
+      color: #666;
+      padding: 2.5rem 1rem;
+      font-size: 14px;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #2e7d32;
+      color: #fff;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      display: none;
+      z-index: 1000;
+    }
+
+    /* Responsive */
+    @media (max-width: 650px) {
+      .form-grid { grid-template-columns: 1fr; }
+      .field.col-span { grid-column: span 1; }
+      .book-table { display: block; overflow-x: auto; }
+      .header-right { flex-direction: column; align-items: flex-end; gap: 4px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="lib-header">
+    <div class="lib-brand">
+      <div class="lib-logo">👨‍💼</div>
+      <span class="lib-title-small">SIET Librarian Control Panel</span>
+    </div>
+    <div class="header-right">
+      <div class="staff-badge">
+        <div class="staff-name" id="staffName">Library Staff</div>
+        <div id="staffId">Administrator</div>
+      </div>
+      <button class="header-btn" onclick="doLogout()">Logout</button>
+    </div>
+  </header>
+
+  <div class="page-container">
+
+    <!-- ADD BOOK CARD -->
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <div class="card-title">Add New Book to Inventory</div>
+          <div class="card-subtitle">Assign physical coordinates for student search</div>
+        </div>
+      </div>
+      <div class="form-grid">
+        <div class="field col-span">
+          <label>Book Title *</label>
+          <input type="text" id="newTitle" placeholder="e.g. Distributed Operating Systems" required>
+        </div>
+        <div class="field">
+          <label>Author *</label>
+          <input type="text" id="newAuthor" placeholder="e.g. Andrew S. Tanenbaum" required>
+        </div>
+        <div class="field">
+          <label>Initial Availability</label>
+          <select id="newAvail">
+            <option value="true">Available on Shelf</option>
+            <option value="false">Unavailable / Checked Out</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Rack</label>
+          <input type="text" id="newRack" placeholder="e.g. Rack 3">
+        </div>
+        <div class="field">
+          <label>Column</label>
+          <input type="text" id="newCol" placeholder="e.g. Col 2">
+        </div>
+        <div class="field">
+          <label>Row</label>
+          <input type="text" id="newRow" placeholder="e.g. Row 1">
+        </div>
+        <div class="field">
+          <label>Position</label>
+          <input type="text" id="newPos" placeholder="e.g. 2nd">
+        </div>
+      </div>
+      <div style="margin-top: 1.5rem; text-align: right;">
+        <button class="btn btn-green" onclick="addBook()">+ Add to Catalog</button>
+      </div>
+    </div>
+
+    <!-- MANAGE INVENTORY CARD -->
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <div class="card-title">Manage Library Inventory</div>
+          <div class="card-subtitle">Update shelf status, toggle availability, or delete records</div>
+        </div>
+        <span id="inventoryCount" style="font-size:13px; font-weight:700; color:#1b5e20;">8 books</span>
+      </div>
+      
+      <div class="search-row">
+        <input type="text" id="libSearchInput" placeholder="Filter inventory by title or author..." oninput="renderBooks()">
+        <button class="btn btn-green" onclick="renderBooks()">Filter</button>
+      </div>
+
+      <div style="overflow-x: auto;">
+        <table class="book-table">
+          <thead>
+            <tr>
+              <th>Title & Author</th>
+              <th>Physical Shelf Location</th>
+              <th>Status</th>
+              <th style="text-align: right;">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="bookListBody">
+          </tbody>
+        </table>
+      </div>
+      <div id="noResultMsg" class="no-result" style="display:none;">
+        No books found matching your filter criteria.
+      </div>
+    </div>
+
+  </div>
+
+  <div id="toast" class="toast">Action completed successfully</div>
+
+<script src="shared_library.js"></script>
+<script>
+let books = getBooks();
+
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.style.display = 'block';
+  setTimeout(() => {
+    toast.style.display = 'none';
+  }, 2500);
+}
+
+function doLogout() {
+  clearCurrentUser();
+  window.location.href = "Home_page.html";
+}
+
+function initLibrarianProfile() {
+  const user = getCurrentUser();
+  if (user) {
+    const nameEl = document.getElementById('staffName');
+    const idEl = document.getElementById('staffId');
+    if (nameEl) nameEl.textContent = (user.firstName || 'Librarian') + ' ' + (user.lastName || '');
+    if (idEl) idEl.textContent = user.staffId ? `Staff ID: ${user.staffId}` : 'Library Admin';
+  }
+}
+
+function renderBooks() {
+  books = getBooks();
+  const searchTerm = (document.getElementById('libSearchInput').value || '').toLowerCase().trim();
+  const tbody = document.getElementById('bookListBody');
+  const noResultMsg = document.getElementById('noResultMsg');
+  const countEl = document.getElementById('inventoryCount');
+
+  if (countEl) countEl.textContent = `${books.length} book${books.length === 1 ? '' : 's'}`;
+
+  tbody.innerHTML = '';
+
+  const filteredBooks = books.filter(b => {
+    const title = (b.title || '').toLowerCase();
+    const author = (b.author || '').toLowerCase();
+    return title.includes(searchTerm) || author.includes(searchTerm);
+  });
+
+  if (filteredBooks.length === 0) {
+    noResultMsg.style.display = 'block';
+    return;
+  } else {
+    noResultMsg.style.display = 'none';
+  }
+
+  filteredBooks.forEach(book => {
+    const tr = document.createElement('tr');
+
+    const statusClass = book.available ? 'status-available' : 'status-unavailable';
+    const statusText = book.available ? '● Available' : '○ Issued';
+
+    const safeTitle = escapeHtml(book.title || 'Untitled');
+    const safeAuthor = escapeHtml(book.author || 'Unknown');
+    const safeRack = escapeHtml(book.rack || 'Rack -');
+    const safeCol = escapeHtml(book.column || 'Col -');
+    const safeRow = escapeHtml(book.row || 'Row -');
+    const safePos = escapeHtml(book.pos || 'Pos -');
+
+    tr.innerHTML = `
+      <td>
+        <div style="font-weight:700; color:#1B5E20; font-size:15px;">${safeTitle}</div>
+        <div style="font-size:12px; color:#666; margin-top:2px;">by ${safeAuthor}</div>
+      </td>
+      <td style="font-size:13px; color:#444;">
+        <strong>${safeRack}</strong>, ${safeCol}, ${safeRow} (${safePos})
+      </td>
+      <td>
+        <span class="status-badge ${statusClass}">${statusText}</span>
+      </td>
+      <td style="text-align: right;">
+        <div style="display:inline-flex; gap:6px;">
+          <button class="btn btn-blue" onclick="toggleAvailability(${book.id})" title="Toggle status">Toggle</button>
+          <button class="btn btn-red" onclick="deleteBook(${book.id})" title="Remove from catalog">Delete</button>
+        </div>
+      </td>
+    `;
+
+    tbody.appendChild(tr);
+  });
+}
+
+function addBook() {
+  const title = document.getElementById('newTitle').value.trim();
+  const author = document.getElementById('newAuthor').value.trim();
+  const rack = document.getElementById('newRack').value.trim();
+  const col = document.getElementById('newCol').value.trim();
+  const row = document.getElementById('newRow').value.trim();
+  const pos = document.getElementById('newPos').value.trim();
+  const avail = document.getElementById('newAvail').value === 'true';
+
+  if (!title || !author) {
+    alert("Please enter both the Book Title and Author.");
+    return;
+  }
+
+  books = getBooks();
+
+  // Safe unique numeric ID calculation
+  const nextId = books.reduce((max, b) => Math.max(max, Number(b.id) || 0), 0) + 1;
+
+  const newBook = {
+    id: nextId,
+    title,
+    author,
+    rack: rack || 'Rack 1',
+    column: col || 'Col 1',
+    row: row || 'Row 1',
+    pos: pos || '1st',
+    available: avail
+  };
+
+  books.push(newBook);
+  saveBooks(books);
+
+  /* Clear Form */
+  document.getElementById('newTitle').value = '';
+  document.getElementById('newAuthor').value = '';
+  document.getElementById('newRack').value = '';
+  document.getElementById('newCol').value = '';
+  document.getElementById('newRow').value = '';
+  document.getElementById('newPos').value = '';
+
+  renderBooks();
+  showToast(`Book "${title}" added successfully!`);
+}
+
+function deleteBook(id) {
+  const book = books.find(b => b.id === id);
+  const bookTitle = book ? `"${book.title}"` : "this book";
+  
+  if (confirm(`Are you sure you want to delete ${bookTitle} from the library catalog?`)) {
+    books = books.filter(b => b.id !== id);
+    saveBooks(books);
+    renderBooks();
+    showToast("Book deleted from catalog.");
+  }
+}
+
+function toggleAvailability(id) {
+  books = getBooks();
+  const book = books.find(b => b.id === id);
+
+  if (book) {
+    book.available = !book.available;
+    saveBooks(books);
+    renderBooks();
+    showToast(`Status updated to: ${book.available ? 'Available' : 'Issued'}`);
+  }
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  initLibrarianProfile();
+  renderBooks();
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Dashboard - SIET Library</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0; 
+      padding: 0;
+    }
+    .lib-wrap { 
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #1daa1f 0%, #a8e063 50%, #f7dc6f 100%);
+      color: #fff;
+    }
+    .lib-header { 
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: rgba(30, 130, 30, 0.85);
+      backdrop-filter: blur(8px);
+      height: 75px;
+      padding: 0 24px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+    }
+    .lib-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .lib-logo { 
+      width: 48px; 
+      height: 48px;
+      background: #fff;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .lib-title-small { 
+      font-size: 19px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 0.5px;
+    }
+    .user-badge {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .user-info {
+      text-align: right;
+      font-size: 13px;
+      line-height: 1.3;
+    }
+    .user-name {
+      font-weight: 700;
+      color: #fff;
+    }
+    .user-dept {
+      color: #e0ffe0;
+      font-size: 11px;
+    }
+    .logout-btn { 
+      padding: 8px 16px; 
+      background-color: #f44336; 
+      color: white; 
+      border: none; 
+      border-radius: 6px; 
+      cursor: pointer; 
+      font-weight: 700; 
+      font-size: 13px;
+      transition: background-color 0.2s, transform 0.1s;
+    }
+    .logout-btn:hover { 
+      background-color: #d32f2f;
+      transform: translateY(-1px);
+    }
+    .lib-main { 
+      text-align: center; 
+      padding: 2.5rem 1rem 3rem;
+      max-width: 650px;
+      margin: 0 auto;
+    }
+    .lib-main h1 { 
+      font-size: 38px;
+      font-weight: 800;
+      line-height: 1.2; 
+      margin-bottom: 0.6rem; 
+      text-shadow: 0 2px 5px rgba(0,0,0,0.25); 
+    }
+    .lib-main p { 
+      font-size: 16px; 
+      color: #f4fff4; 
+      max-width: 500px; 
+      margin: 0 auto 2rem; 
+      line-height: 1.5; 
+      text-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }  
+    .search-box { 
+      background: rgba(255,255,255,0.2); 
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px); 
+      border: 1px solid rgba(255,255,255,0.35);
+      border-radius: 14px; 
+      padding: 1.5rem; 
+      margin: 0 auto 2rem;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    }
+    .search-row { 
+      display: flex;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.12);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .search-row select { 
+      padding: 12px 14px;
+      border: 1px solid #ddd;
+      border-right: none;
+      background: #f8f9fa;
+      color: #333; 
+      font-size: 14px;
+      font-weight: 600;
+      outline: none;
+      cursor: pointer;
+    }
+    .search-row input { 
+      flex: 1; 
+      padding: 12px 16px; 
+      border: 1px solid #ddd; 
+      outline: none; 
+      font-size: 15px; 
+      color: #333; 
+      background: #fff;
+    }
+    .search-row button { 
+      padding: 12px 24px; 
+      background-color: #1565C0; 
+      color: white;
+      border: none; 
+      cursor: pointer; 
+      font-weight: 700; 
+      font-size: 14px; 
+      transition: background-color 0.2s;
+    }
+    .search-row button:hover { 
+      background-color: #0D47A1; 
+    }
+    .search-options {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 10px;
+      font-size: 12px;
+      color: #f0fff0;
+    }
+    .filter-btn {
+      background: rgba(255,255,255,0.25);
+      border: 1px solid rgba(255,255,255,0.4);
+      color: #fff;
+      border-radius: 4px;
+      padding: 4px 10px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+      transition: background 0.2s;
+    }
+    .filter-btn:hover {
+      background: rgba(255,255,255,0.4);
+    }
+    #searchResults { 
+      margin: 0 auto; 
+      text-align: left; 
+    }
+    .result-card { 
+      background: rgba(255,255,255,0.96); 
+      color: #222; 
+      border-radius: 10px; 
+      padding: 16px 18px; 
+      margin-bottom: 14px; /* Fixed: previously 100px */
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .result-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+    }
+    .result-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 4px;
+    }
+    .result-title { 
+      font-weight: 700; 
+      font-size: 18px; /* Fixed: previously 32px */
+      color: #1b5e20;
+      line-height: 1.3;
+    }
+    .result-author { 
+      font-size: 14px; 
+      color: #555; 
+      margin-bottom: 12px; 
+      font-style: italic;
+    }
+    .result-loc { 
+      display: flex; 
+      gap: 6px; 
+      flex-wrap: wrap; 
+    }
+    .loc-chip { 
+      background: #E3F2FD; 
+      color: #0C447C; 
+      border: 1px solid #bbdefb;
+      border-radius: 6px; 
+      padding: 5px 10px; 
+      font-size: 12px; 
+      font-weight: 600;
+    }
+    .avail { 
+      display: inline-block;
+      padding: 4px 10px; 
+      border-radius: 20px; 
+      font-size: 12px; 
+      font-weight: 700; 
+      white-space: nowrap;
+    }
+    .yes { 
+      background: #C8E6C9; 
+      color: #1B5E20; 
+    }
+    .no { 
+      background: #FFCDD2; 
+      color: #B71C1C; 
+    }
+    .no-result { 
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 8px;
+      padding: 1.5rem; 
+      color: #fff; 
+      font-size: 14px; 
+      text-align: center;
+    }
+    .stats { 
+      display: flex; 
+      justify-content: center; 
+      gap: 1.5rem; 
+      margin-top: 2.5rem; 
+      flex-wrap: wrap;
+    }
+    .stat { 
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(5px);
+      border-radius: 10px;
+      padding: 12px 20px;
+      text-align: center; 
+      min-width: 110px;
+    }
+    .stat-num { 
+      font-size: 24px; 
+      font-weight: 800; 
+    }
+    .stat-lbl { 
+      font-size: 12px;
+      color: #e0ffe0; 
+      margin-top: 2px; 
+    }
+    @media (max-width: 600px) {
+      .search-row { flex-direction: column; }
+      .search-row select, .search-row input, .search-row button {
+        width: 100%;
+        border-radius: 0;
+      }
+      .search-row select { border-radius: 8px 8px 0 0; }
+      .search-row button { border-radius: 0 0 8px 8px; }
+      .user-badge { flex-direction: column; align-items: flex-end; gap: 4px; }
+    }
+  </style>
+</head>
+<body>
+<div class="lib-wrap">
+  <header class="lib-header">
+    <div class="lib-brand">
+      <div class="lib-logo">📚</div>
+      <span class="lib-title-small">SIET Library</span>
+    </div>
+    <div class="user-badge">
+      <div class="user-info">
+        <div class="user-name" id="userName">Student Portal</div>
+        <div class="user-dept" id="userDept">Registered Member</div>
+      </div>
+      <button class="logout-btn" onclick="doLogout()">Logout</button>
+    </div>
+  </header>
+
+  <main class="lib-main">
+    <h1>BOOK LOCATOR</h1>
+    <p>Find your academic text and see its exact physical rack, shelf, and position.</p>
+
+    <div class="search-box">
+      <div class="search-row">
+        <select id="searchType" aria-label="Search criteria">
+          <option value="all">All Fields</option>
+          <option value="title">Title</option>
+          <option value="author">Author</option>
+        </select>
+        <input 
+          type="search" 
+          id="searchInput" 
+          placeholder="Search by title, author, or keyword..." 
+          oninput="doSearch()" 
+          onkeydown="if(event.key==='Enter')doSearch()" 
+          aria-label="Search query"
+        />
+        <button onclick="doSearch()">Search</button>
+      </div>
+      <div class="search-options">
+        <span>Showing real-time catalog items</span>
+        <button class="filter-btn" onclick="showAllBooks()">View All Books</button>
+      </div>
+    </div>
+
+    <div id="searchResults"></div>
+
+    <div class="stats">
+      <div class="stat"><div class="stat-num" id="statTotalBooks">8+</div><div class="stat-lbl">Catalog Books</div></div>
+      <div class="stat"><div class="stat-num" id="statTotalRacks">5</div><div class="stat-lbl">Active Racks</div></div>
+      <div class="stat"><div class="stat-num" id="statAvailable">6</div><div class="stat-lbl">Available Now</div></div>
+    </div>
+  </main>
+</div>
+
+<script src="shared_library.js"></script>
+<script>
+function doLogout() {
+  clearCurrentUser();
+  window.location.href = "Home_page.html";
+}
+
+function initUserProfile() {
+  const user = getCurrentUser();
+  if (user) {
+    const nameEl = document.getElementById('userName');
+    const deptEl = document.getElementById('userDept');
+    if (nameEl) nameEl.textContent = (user.firstName || 'Student') + ' ' + (user.lastName || '');
+    if (deptEl) deptEl.textContent = (user.department || '') + (user.studentId ? ' (' + user.studentId + ')' : '');
+  }
+}
+
+function updateDashboardStats(books) {
+  const totalEl = document.getElementById('statTotalBooks');
+  const racksEl = document.getElementById('statTotalRacks');
+  const availEl = document.getElementById('statAvailable');
+
+  if (totalEl) totalEl.textContent = books.length;
+  if (racksEl) {
+    const racks = new Set(books.map(b => b.rack).filter(Boolean));
+    racksEl.textContent = racks.size || 5;
+  }
+  if (availEl) {
+    const availCount = books.filter(b => b.available).length;
+    availEl.textContent = availCount;
+  }
+}
+
+function renderResults(resultsList, query) {
+  const out = document.getElementById('searchResults');
+  if (!resultsList || resultsList.length === 0) {
+    out.innerHTML = `<div class="no-result">No books found matching "${escapeHtml(query)}". Try another search or click "View All Books".</div>`;
+    return;
+  }
+
+  out.innerHTML = resultsList.map(b => `
+    <div class="result-card">
+      <div class="result-header">
+        <div class="result-title">${escapeHtml(b.title || 'Untitled')}</div>
+        <span class="avail ${b.available ? 'yes' : 'no'}">
+          ${b.available ? '● Available' : '○ Issued'}
+        </span>
+      </div>
+
+      <div class="result-author">by ${escapeHtml(b.author || 'Unknown')}</div>
+
+      <div class="result-loc">
+        <span class="loc-chip">🗄️ ${escapeHtml(b.rack || 'N/A')}</span>
+        <span class="loc-chip">🗂 ${escapeHtml(b.column || 'N/A')}</span>
+        <span class="loc-chip">↕ ${escapeHtml(b.row || 'N/A')}</span>
+        <span class="loc-chip">🎯 Pos: ${escapeHtml(b.pos || 'N/A')}</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+function doSearch() {
+  const books = getBooks();
+  updateDashboardStats(books);
+
+  const q = (document.getElementById('searchInput').value || '').trim().toLowerCase();
+  const type = document.getElementById('searchType').value;
+  const out = document.getElementById('searchResults');
+
+  if (!q) {
+    // Show top 4 books by default if search is empty
+    renderResults(books.slice(0, 4), "");
+    return;
+  }
+
+  const results = books.filter(b => {
+    const title = (b.title || '').toLowerCase();
+    const author = (b.author || '').toLowerCase();
+    const rack = (b.rack || '').toLowerCase();
+
+    if (type === 'author') return author.includes(q);
+    if (type === 'title') return title.includes(q);
+    return title.includes(q) || author.includes(q) || rack.includes(q);
+  });
+
+  renderResults(results, q);
+}
+
+function showAllBooks() {
+  const books = getBooks();
+  document.getElementById('searchInput').value = '';
+  renderResults(books, "");
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  initUserProfile();
+  doSearch();
+});
+</script>
+</body>
+</html>

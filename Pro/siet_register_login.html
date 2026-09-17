@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SIET Library - Authentication Portal</title>
+  <style>
+    * { 
+      box-sizing: border-box; 
+      margin: 0; 
+      padding: 0; 
+    }
+    body { 
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #1daa1f 0%, #a8e063 50%, #f7dc6f 100%);
+      min-height: 100vh;
+      color: #333;
+    }
+    .page { 
+      min-height: 100vh; 
+      padding: 1.5rem 1rem 3rem; 
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .top-bar { 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center; 
+      background: rgba(30, 130, 30, 0.85);
+      backdrop-filter: blur(8px);
+      padding: 0 20px; 
+      height: 60px; 
+      border-radius: 12px; 
+      margin-bottom: 1.5rem; 
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    .top-bar-title { 
+      color: #fff; 
+      font-size: 18px; 
+      font-weight: bold;
+    }
+    .back-btn { 
+      background: rgba(255,255,255,0.25); 
+      color: #fff; 
+      border: 1px solid rgba(255,255,255,0.4); 
+      border-radius: 6px; 
+      padding: 8px 16px; 
+      cursor: pointer; 
+      font-size: 13px; 
+      font-weight: 600;
+      transition: background 0.2s;
+      text-decoration: none;
+    }
+    .back-btn:hover {
+      background: rgba(255,255,255,0.4);
+    }
+    .tab-row { 
+      display: flex; 
+      gap: 0; 
+      max-width: 480px; 
+      margin: 0 auto 1.5rem; 
+      background: rgba(0, 0, 0, 0.15); 
+      border-radius: 10px; 
+      padding: 4px;
+    }
+    .tab { 
+      flex: 1; 
+      padding: 10px; 
+      text-align: center; 
+      border-radius: 8px; 
+      cursor: pointer; 
+      font-size: 14px; 
+      font-weight: 700; 
+      color: rgba(255,255,255,0.9); 
+      border: none; 
+      background: transparent; 
+      transition: all 0.2s;
+    }
+    .tab.active { 
+      background: #fff; 
+      color: #1B5E20;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    .card { 
+      background: #fff; 
+      border-radius: 14px; 
+      max-width: 480px; 
+      margin: 0 auto; 
+      padding: 2rem;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    }
+    .card-title { 
+      font-size: 22px; 
+      font-weight: 800; 
+      color: #1B5E20; 
+      margin-bottom: 4px; 
+      text-align: center;
+    }
+    .card-sub { 
+      font-size: 13px; 
+      color: #666; 
+      text-align: center; 
+      margin-bottom: 1.5rem; 
+    }
+    .role-row { 
+      display: flex; 
+      gap: 8px; 
+      margin-bottom: 1.25rem; 
+    }
+    .role-btn { 
+      flex: 1; 
+      padding: 10px; 
+      border: 2px solid #e0e0e0; 
+      border-radius: 8px; 
+      background: #fdfdfd; 
+      font-size: 13px; 
+      font-weight: 700; 
+      cursor: pointer; 
+      color: #666; 
+      transition: all 0.2s;
+    }
+    .role-btn.active { 
+      border-color: #1daa1f; 
+      background: #E8F5E9; 
+      color: #1B5E20;
+    }
+    .field { 
+      margin-bottom: 1rem;
+    }
+    .field label { 
+      display: block; 
+      font-size: 13px; 
+      font-weight: 700; 
+      color: #444; 
+      margin-bottom: 6px; 
+    }
+    .field input, .field select { 
+      width: 100%; 
+      padding: 10px 12px; 
+      border: 1px solid #ccc; 
+      border-radius: 6px; 
+      font-size: 14px; 
+      color: #333; 
+      outline: none; 
+      background: #fff; 
+      transition: border-color 0.2s;
+    }
+    .field input:focus, .field select:focus { 
+      border-color: #1daa1f; 
+      box-shadow: 0 0 0 3px rgba(29,170,31,0.15);
+    }
+    .row2 { 
+      display: grid; 
+      grid-template-columns: 1fr 1fr; 
+      gap: 12px;
+    }
+    .err { 
+      font-size: 12px; 
+      color: #c62828; 
+      margin-top: 4px; 
+      display: none; 
+      font-weight: 600;
+    }
+    .submit-btn { 
+      width: 100%; 
+      padding: 12px; 
+      background: #1daa1f; 
+      color: #fff; 
+      border: none; 
+      border-radius: 8px; 
+      font-size: 15px; 
+      font-weight: 700; 
+      cursor: pointer; 
+      margin-top: 0.5rem;
+      transition: background 0.2s;
+    }
+    .submit-btn:hover { 
+      background: #157a17; 
+    }
+    .switch-text { 
+      text-align: center; 
+      font-size: 13px; 
+      color: #666; 
+      margin-top: 1.25rem; 
+    }
+    .switch-text a { 
+      color: #1daa1f; 
+      cursor: pointer; 
+      font-weight: 700; 
+      text-decoration: none; 
+    }
+    .switch-text a:hover {
+      text-decoration: underline;
+    }
+    .success-box { 
+      display: none; 
+      background: #E8F5E9; 
+      border: 1px solid #81C784; 
+      border-radius: 8px; 
+      padding: 12px 16px; 
+      margin-bottom: 1rem; 
+      color: #1B5E20; 
+      font-size: 14px; 
+      text-align: center;
+      font-weight: 600;
+    }
+    .error-box { 
+      display: none; 
+      background: #FFEBEE; 
+      border: 1px solid #EF9A9A; 
+      border-radius: 8px; 
+      padding: 12px 16px; 
+      margin-bottom: 1rem; 
+      color: #C62828; 
+      font-size: 13px; 
+      text-align: center;
+      font-weight: 600;
+    }
+    .demo-creds {
+      margin-top: 1.25rem;
+      background: #f8f9fa;
+      border: 1px dashed #c8e6c9;
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-size: 12px;
+      color: #555;
+      line-height: 1.5;
+    }
+    .demo-creds strong {
+      color: #1b5e20;
+    }
+    .demo-chip {
+      display: inline-block;
+      cursor: pointer;
+      color: #1565C0;
+      text-decoration: underline;
+      margin-left: 4px;
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="top-bar">
+    <span class="top-bar-title">SIET Smart Library</span>
+    <a href="Home_page.html" class="back-btn">← Home</a>
+  </div>
+
+  <div class="tab-row">
+    <button class="tab active" id="tabLogin" onclick="showTab('login')">Login</button>
+    <button class="tab" id="tabReg" onclick="showTab('register')">Register</button>
+  </div>
+
+  <!-- LOGIN CARD -->
+  <div class="card" id="loginCard">
+    <div class="card-title">Welcome Back</div>
+    <div class="card-sub">Login to access book locator and library services</div>
+
+    <div class="role-row">
+      <button class="role-btn active" id="lRoleStudent" onclick="setLoginRole('student')">Student</button>
+      <button class="role-btn" id="lRoleLib" onclick="setLoginRole('librarian')">Librarian</button>
+    </div>
+
+    <div id="loginSuccess" class="success-box">Login successful! Redirecting...</div>
+    <div id="loginGeneralErr" class="error-box">Invalid credentials. Please try again.</div>
+
+    <div class="field">
+      <label>Email Address</label>
+      <input type="email" id="lEmail" placeholder="e.g. student@siet.edu.in" autocomplete="email" />
+      <div class="err" id="lEmailErr">Please enter a valid email.</div>
+    </div>
+    <div class="field">
+      <label>Password</label>
+      <input type="password" id="lPass" placeholder="Enter your password" autocomplete="current-password" />
+      <div class="err" id="lPassErr">Password is required.</div>
+    </div>
+    <div id="lIdField" class="field">
+      <label>Student Register No:</label>
+      <input type="text" id="lId" placeholder="e.g. 714025104001" />
+      <div class="err" id="lIdErr">Student Register Number is required.</div>
+    </div>
+
+    <button class="submit-btn" onclick="doLogin()">Login</button>
+    <div class="switch-text">Don't have an account? <a onclick="showTab('register')">Register here</a></div>
+
+    <div class="demo-creds">
+      <strong>Demo Accounts:</strong><br>
+      • Student: <code>student@siet.edu.in</code> | pass: <code>student123</code> | Reg: <code>714025104001</code>
+      <span class="demo-chip" onclick="fillDemo('student')">[Fill]</span><br>
+      • Librarian: <code>librarian@siet.edu.in</code> | pass: <code>admin123</code>
+      <span class="demo-chip" onclick="fillDemo('librarian')">[Fill]</span>
+    </div>
+  </div>
+
+  <!-- REGISTER CARD -->
+  <div class="card" id="regCard" style="display:none;">
+    <div class="card-title">Create Account</div>
+    <div class="card-sub">Register to use the SIET Library system</div>
+
+    <div class="role-row">
+      <button class="role-btn active" id="rRoleStudent" onclick="setRegRole('student')">Student</button>
+      <button class="role-btn" id="rRoleLib" onclick="setRegRole('librarian')">Librarian</button>
+    </div>
+
+    <div id="regSuccess" class="success-box">Registration successful! Redirecting to login...</div>
+    <div id="regGeneralErr" class="error-box">User already exists with this email or ID.</div>
+
+    <div class="row2">
+      <div class="field">
+        <label>First Name</label>
+        <input type="text" id="rFirst" placeholder="First name" />
+        <div class="err" id="rFirstErr">Required.</div>
+      </div>
+      <div class="field">
+        <label>Last Name</label>
+        <input type="text" id="rLast" placeholder="Last name" />
+        <div class="err" id="rLastErr">Required.</div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Email Address</label>
+      <input type="email" id="rEmail" placeholder="Example@siet.edu.in" />
+      <div class="err" id="rEmailErr">Valid email required.</div>
+    </div>
+
+    <!-- Student Specific Fields -->
+    <div id="studentFields">
+      <div class="row2">
+        <div class="field">
+          <label>Student Register No:</label>
+          <input type="text" id="rStudId" placeholder="714025104***" />
+          <div class="err" id="rStudIdErr">Register No. required.</div>
+        </div>
+        <div class="field">
+          <label>Phone Number</label>
+          <input type="tel" id="rPhone" placeholder="10-digit number" />
+          <div class="err" id="rPhoneErr">Valid 10-digit phone required.</div>
+        </div>
+      </div>
+      <div class="row2">
+        <div class="field">
+          <label>Department</label>
+          <select id="rDept">
+            <option value="">Select dept</option>
+            <option>Computer Science</option>
+            <option>Information Technology</option>
+            <option>Electronics</option>
+            <option>Mechanical</option>
+            <option>Civil</option>
+            <option>AIDS</option>
+            <option>AIML</option>
+          </select>
+          <div class="err" id="rDeptErr">Select a department.</div>
+        </div>
+        <div class="field">
+          <label>Year</label>
+          <select id="rYear">
+            <option value="">Select year</option>
+            <option>1st Year</option>
+            <option>2nd Year</option>
+            <option>3rd Year</option>
+            <option>4th Year</option>
+          </select>
+          <div class="err" id="rYearErr">Select a year.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Librarian Specific Fields -->
+    <div id="libFields" style="display:none;">
+      <div class="row2">
+        <div class="field">
+          <label>Staff ID</label>
+          <input type="text" id="rStaffId" placeholder="e.g. LIB002" />
+          <div class="err" id="rStaffIdErr">Staff ID required.</div>
+        </div>
+        <div class="field">
+          <label>Phone Number</label>
+          <input type="tel" id="rLibPhone" placeholder="10-digit number" />
+          <div class="err" id="rLibPhoneErr">Valid 10-digit phone required.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row2">
+      <div class="field">
+        <label>Password</label>
+        <input type="password" id="rPass" placeholder="Min 6 characters" />
+        <div class="err" id="rPassErr">Min 6 characters.</div>
+      </div>
+      <div class="field">
+        <label>Confirm Password</label>
+        <input type="password" id="rConfirm" placeholder="Re-enter password" />
+        <div class="err" id="rConfirmErr">Passwords do not match.</div>
+      </div>
+    </div>
+
+    <button class="submit-btn" onclick="doRegister()">Create Account</button>
+    <div class="switch-text">Already have an account? <a onclick="showTab('login')">Login here</a></div>
+  </div>
+</div>
+
+<script src="shared_library.js"></script>
+<script>
+let loginRole = 'student';
+let regRole = 'student';
+
+function showTab(tab) {
+  document.getElementById('loginCard').style.display = tab === 'login' ? 'block' : 'none';
+  document.getElementById('regCard').style.display = tab === 'register' ? 'block' : 'none';
+  document.getElementById('tabLogin').classList.toggle('active', tab === 'login');
+  document.getElementById('tabReg').classList.toggle('active', tab === 'register');
+  hideErrBoxes();
+}
+
+function setLoginRole(role) {
+  loginRole = role;
+  document.getElementById('lRoleStudent').classList.toggle('active', role === 'student');
+  document.getElementById('lRoleLib').classList.toggle('active', role === 'librarian');
+  document.getElementById('lIdField').style.display = role === 'student' ? 'block' : 'none';
+  hideErrBoxes();
+}
+
+function setRegRole(role) {
+  regRole = role;
+  document.getElementById('rRoleStudent').classList.toggle('active', role === 'student');
+  document.getElementById('rRoleLib').classList.toggle('active', role === 'librarian');
+  document.getElementById('studentFields').style.display = role === 'student' ? 'block' : 'none';
+  document.getElementById('libFields').style.display = role === 'librarian' ? 'block' : 'none';
+  hideErrBoxes();
+}
+
+function showErr(id, show) {
+  const el = document.getElementById(id);
+  if (el) el.style.display = show ? 'block' : 'none';
+}
+
+function hideErrBoxes() {
+  document.getElementById('loginGeneralErr').style.display = 'none';
+  document.getElementById('regGeneralErr').style.display = 'none';
+  document.getElementById('loginSuccess').style.display = 'none';
+  document.getElementById('regSuccess').style.display = 'none';
+}
+
+function val(id) { 
+  const el = document.getElementById(id);
+  return el ? el.value.trim() : ''; 
+}
+
+function fillDemo(role) {
+  if (role === 'student') {
+    setLoginRole('student');
+    document.getElementById('lEmail').value = 'student@siet.edu.in';
+    document.getElementById('lPass').value = 'student123';
+    document.getElementById('lId').value = '714025104001';
+  } else {
+    setLoginRole('librarian');
+    document.getElementById('lEmail').value = 'librarian@siet.edu.in';
+    document.getElementById('lPass').value = 'admin123';
+  }
+}
+
+function doLogin() {
+  hideErrBoxes();
+  let ok = true;
+
+  const email = val('lEmail');
+  const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  showErr('lEmailErr', !emailOk);
+  if (!emailOk) ok = false;
+
+  const pass = val('lPass');
+  const passOk = pass.length >= 1;
+  showErr('lPassErr', !passOk);
+  if (!passOk) ok = false;
+
+  const studentId = val('lId');
+  if (loginRole === 'student') {
+    const idOk = studentId.length >= 1;
+    showErr('lIdErr', !idOk);
+    if (!idOk) ok = false;
+  }
+
+  if (!ok) return;
+
+  const users = getUsers();
+  let authenticatedUser = null;
+
+  if (loginRole === 'student') {
+    authenticatedUser = (users.students || []).find(s => 
+      s.email.toLowerCase() === email.toLowerCase() && 
+      s.password === pass &&
+      s.studentId === studentId
+    );
+    // Allow demo convenience if ID matches or email matches password
+    if (!authenticatedUser) {
+      authenticatedUser = (users.students || []).find(s => 
+        s.email.toLowerCase() === email.toLowerCase() && s.password === pass
+      );
+    }
+  } else {
+    authenticatedUser = (users.librarians || []).find(l => 
+      l.email.toLowerCase() === email.toLowerCase() && l.password === pass
+    );
+  }
+
+  if (authenticatedUser) {
+    setCurrentUser({
+      ...authenticatedUser,
+      role: loginRole
+    });
+    document.getElementById('loginSuccess').style.display = 'block';
+
+    setTimeout(() => {
+      if (loginRole === 'student') {
+        window.location.href = "After_login_page.html";
+      } else {
+        window.location.href = "Librarian_Desktop.html";
+      }
+    }, 700);
+  } else {
+    const errBox = document.getElementById('loginGeneralErr');
+    errBox.textContent = loginRole === 'student'
+      ? "Invalid Student credentials. Please verify your Email, Password, and Register Number."
+      : "Invalid Librarian credentials. Please verify your Email and Password.";
+    errBox.style.display = 'block';
+  }
+}
+
+function doRegister() {
+  hideErrBoxes();
+  let ok = true;
+
+  const first = val('rFirst');
+  const fOk = first.length >= 1; 
+  showErr('rFirstErr', !fOk); 
+  if (!fOk) ok = false;
+
+  const last = val('rLast');
+  const lOk = last.length >= 1; 
+  showErr('rLastErr', !lOk); 
+  if (!lOk) ok = false;
+
+  const email = val('rEmail');
+  const eOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email); 
+  showErr('rEmailErr', !eOk); 
+  if (!eOk) ok = false;
+
+  let studId = '', phone = '', dept = '', year = '', staffId = '', libPhone = '';
+
+  if (regRole === 'student') {
+    studId = val('rStudId');
+    const sOk = studId.length >= 1; 
+    showErr('rStudIdErr', !sOk); 
+    if (!sOk) ok = false;
+
+    phone = val('rPhone');
+    const phOk = /^\d{10}$/.test(phone); 
+    showErr('rPhoneErr', !phOk); 
+    if (!phOk) ok = false;
+
+    dept = val('rDept');
+    const dOk = dept !== ''; 
+    showErr('rDeptErr', !dOk); 
+    if (!dOk) ok = false;
+
+    year = val('rYear');
+    const yOk = year !== ''; 
+    showErr('rYearErr', !yOk); 
+    if (!yOk) ok = false;
+  } else {
+    staffId = val('rStaffId');
+    const stOk = staffId.length >= 1;
+    showErr('rStaffIdErr', !stOk);
+    if (!stOk) ok = false;
+
+    libPhone = val('rLibPhone');
+    const lphOk = /^\d{10}$/.test(libPhone);
+    showErr('rLibPhoneErr', !lphOk);
+    if (!lphOk) ok = false;
+  }
+
+  const pass = val('rPass');
+  const pOk = pass.length >= 6; 
+  showErr('rPassErr', !pOk); 
+  if (!pOk) ok = false;
+
+  const confirm = val('rConfirm');
+  const cOk = pass === confirm && confirm.length >= 1; 
+  showErr('rConfirmErr', !cOk); 
+  if (!cOk) ok = false;
+
+  if (!ok) return;
+
+  const users = getUsers();
+
+  if (regRole === 'student') {
+    const existing = users.students.find(s => 
+      s.email.toLowerCase() === email.toLowerCase() || s.studentId === studId
+    );
+    if (existing) {
+      const errBox = document.getElementById('regGeneralErr');
+      errBox.textContent = "A student account with this Email or Register Number already exists.";
+      errBox.style.display = 'block';
+      return;
+    }
+
+    users.students.push({
+      studentId: studId,
+      firstName: first,
+      lastName: last,
+      email: email,
+      phone: phone,
+      department: dept,
+      year: year,
+      password: pass
+    });
+  } else {
+    const existing = users.librarians.find(l => 
+      l.email.toLowerCase() === email.toLowerCase() || l.staffId === staffId
+    );
+    if (existing) {
+      const errBox = document.getElementById('regGeneralErr');
+      errBox.textContent = "A librarian account with this Email or Staff ID already exists.";
+      errBox.style.display = 'block';
+      return;
+    }
+
+    users.librarians.push({
+      staffId: staffId,
+      firstName: first,
+      lastName: last,
+      email: email,
+      phone: libPhone,
+      password: pass
+    });
+  }
+
+  saveUsers(users);
+
+  document.getElementById('regSuccess').style.display = 'block';
+  setTimeout(() => {
+    showTab('login');
+    setLoginRole(regRole);
+    document.getElementById('lEmail').value = email;
+    if (regRole === 'student') {
+      document.getElementById('lId').value = studId;
+    }
+  }, 1200);
+}
+</script>
+</body>
+</html>
